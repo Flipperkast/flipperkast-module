@@ -9,8 +9,5 @@ src: alle broncode
 res: plaatjes en muziek die wel worden gebruikt in de code
 
 assets: plaatjes die niet gebruikt worden in de code
-<<<<<<< HEAD
 
-=======
->>>>>>> Groot deel van de code
 lib: is dit nodig?
