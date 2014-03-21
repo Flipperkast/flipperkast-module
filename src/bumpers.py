@@ -5,9 +5,9 @@ import locale
 
 # all paths
 game_path = "C:\P-ROC\pyprocgame-master\games\VXtra_start/"
-speech_path = game_path +"res/speech/"
-sound_path = game_path +"res/fx/"
-music_path = game_path +"res/music/"
+speech_path = game_path +"sound/speech/"
+sound_path = game_path +"sound/fx/"
+music_path = game_path +"sound/music/"
 dmd_path = game_path +"dmd/"
 
 class Bumpers(game.Mode):

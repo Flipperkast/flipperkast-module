@@ -4,6 +4,7 @@
 import procgame
 import locale
 import logging
+from time import time
 from procgame import *
 
 # Dit importeert alle code uit het bestand 'ramprules.py'
@@ -13,11 +14,11 @@ from bumpers import *
 
 # all paths
 game_path = "C:\P-ROC\pyprocgame-master\games\VXtra_start/"
-speech_path = game_path +"res/speech/"
-sound_path = game_path +"res/fx/"
-music_path = game_path +"res/music/"
+speech_path = game_path +"sound/speech/"
+sound_path = game_path +"sound/fx/"
+music_path = game_path +"sound/music/"
 dmd_path = game_path +"dmd/"
-lampshow_path = game_path +"res/lampshows/"
+lampshow_path = game_path +"lampshows/"
 
 class Generalplay(game.Mode):
 
@@ -33,7 +34,8 @@ class Generalplay(game.Mode):
             
             # register music
             self.game.sound.register_music('starwars', music_path+"starwars_intro.mp3")
-     
+            self.game.sound.register_music('starwars_music', music_path+"starwars_theme.mp3")
+            
             #register animation layers
 ##            self.showroom_text = dmd.TextLayer(70, 22, self.game.fonts['07x5'], "center", opaque=False)
 ##            self.showroom_bgnd = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(dmd_path+'showroom.dmd').frames[0])
@@ -105,7 +107,8 @@ class Generalplay(game.Mode):
         def sw_shooterLane_open_for_100ms(self,sw):
              self.game.coils.RvisorGI.schedule(schedule=0x0f0f0f0f, cycle_seconds=1, now=True) 
              print "flashers moeten nu gaan"
-             
+             self.start_time = time()
+             self.game.sound.play_music('starwars_music', loops=-1)
              
         def sw_eject_active_for_1400ms(self, sw):
              self.game.coils.Ejecthole_LeftInsBFlash.pulse(40)
@@ -124,3 +127,11 @@ class Generalplay(game.Mode):
         def sw_Routlane_active(self,sw):
              self.game.sound.play("outlanes")
              self.game.score(25000)
+             if time() - 30 < self.start_time:
+                     print "GRATIS BAL!"
+             
+        def sw_Loutlane_active(self,sw):
+             self.game.sound.play("outlanes")
+             self.game.score(25000)
+             if time() - 30 < self.start_time:
+                     print "GRATIS BAL!"

@@ -32,19 +32,17 @@ logging.info("Game Path is: "+game_path)
 
 
 fonts_path = game_path + "dmd/fonts/"
-shared_sound_path = game_path + "res/service/"
+shared_sound_path = game_path + "sound/service/"
 
-machine_config_path = game_path + "config/Pinbot.yaml"
-#Dit staat nog niet op de GitHub <
+machine_config_path = game_path + "config/pinbot.yaml"
 settings_path = game_path +"config/settings.yaml"
 game_data_path = game_path +"config/game_data.yaml"
 game_data_template_path = game_path +"config/game_data_template.yaml"
 settings_template_path = game_path +"config/settings_template.yaml"
-#>
-speech_path = game_path +"res/speech/"
-sound_path = game_path +"res/fx/"
-music_path = game_path +"res/music/"
-#Hiervan staat ook niets op de GitHub<
+
+speech_path = game_path +"sound/speech/"
+sound_path = game_path +"sound/fx/"
+music_path = game_path +"sound/music/"
 lampshow_path = game_path +"lampshows/"
 font_tiny7 = dmd.Font(fonts_path+"04B-03-7px.dmd")
 font_jazz18 = dmd.Font(fonts_path+"Jazz18-18px.dmd")
@@ -53,7 +51,7 @@ font_18x12 = dmd.Font(fonts_path+"Font18x12.dmd")
 font_07x4 = dmd.Font(fonts_path+"Font07x4.dmd")
 font_07x5 = dmd.Font(fonts_path+"Font07x5.dmd")
 font_09Bx7 = dmd.Font(fonts_path+"Font09Bx7.dmd")
-#>
+
 lampshow_files = [lampshow_path +"attract/vertikaal.lampshow", \
                   lampshow_path +"attract/wisselend.lampshow", ]
 
@@ -734,6 +732,8 @@ class rkPlayer(game.Player):
     def __init__(self, name):
                 super(rkPlayer, self).__init__(name)
 
+                self.player_stats = {}
+                self.player_stats['status']=''
 
 
 def main():

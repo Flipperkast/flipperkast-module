@@ -5,23 +5,22 @@ import locale
 
 # all paths
 game_path = "C:\P-ROC\pyprocgame-master\games\VXtra_start/"
-speech_path = game_path +"res/speech/"
-sound_path = game_path +"res/fx/"
-music_path = game_path +"res/music/"
+speech_path = game_path +"sound/speech/"
+sound_path = game_path +"sound/fx/"
+music_path = game_path +"sound/music/"
 dmd_path = game_path +"dmd/"
 
 class Ramp_rules(game.Mode):
         # __init__ is wat ie sowieso als eerste uitvoert. Hier kunnen we bv. alle geluiden 'laden'
         def __init__(self, game, priority):
                 super(Ramp_rules, self).__init__(game, priority)
-                #Dit geluid staat nog niet in de GitHub
-                #self.game.sound.register_sound('ramp_sound', sound_path+"starwars_schieten.mp3")
+                self.game.sound.register_sound('ramp_sound', sound_path+"starwars_schieten.mp3")
 
         # modestarted net zo: dit doet ie in het begin, beetje dubbelop misschien....
         
         def mode_started(self):
                 print "Eerste code testrules gestart"
-
+                self.game.effects.ramp_down()
                 # stel je wilt een variabele gebruiken in de 'ramprules'. Deze wordt nu aan het begin van elke bal (dan wordt 'generalplay' en dus ook 'ramprules' geladen) op 0 gezet. Het aantal onthouden tussen ballen door, kan ook, maar dat moet weer anders.
                 self.ramp_aantal_geschoten=0
 
@@ -33,8 +32,7 @@ class Ramp_rules(game.Mode):
                 
         #In de les gedaan, alleen stond dat toen nog in generalplay.py in plaats van in een losse ramprules.py:
         def sw_rampenter_active(self,sw):
-             #Dit geluid staat nog niet op GitHub
-             #self.game.sound.play("ramp_sound")
+             self.game.sound.play("ramp_sound")
              self.game.score(5000)
 
         #Dit is nieuwe code, om wat meer spel te krijgen met echte 'regels' met een variabele verwerkt
@@ -97,7 +95,6 @@ class Ramp_rules(game.Mode):
                 self.game.coils.TopFlash3.schedule(schedule=0x0f0f0f0f, cycle_seconds=1, now=True)
                 self.game.coils.TopFlash4.schedule(schedule=0xf0f0f0f0, cycle_seconds=1, now=True)
                 self.score_energy_animation()
-
                     
                      
 ## Animations

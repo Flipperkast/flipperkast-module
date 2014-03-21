@@ -11,9 +11,9 @@ import random
 
 #all necessary paths
 game_path = "C:\P-ROC\pyprocgame-dev\games\VXtra_start/"
-speech_path = game_path +"res/speech/"
-sound_path = game_path +"res/fx/"
-music_path = game_path +"res/music/"
+speech_path = game_path +"sound/speech/"
+sound_path = game_path +"sound/fx/"
+music_path = game_path +"sound/music/"
 dmd_path = game_path +"dmd/"
 
 class Match(game.Mode):
@@ -107,7 +107,7 @@ class Match(game.Mode):
             #for i in range(len(self.player_digits)):
                 if self.player_digits[i] == self.display_value:
                     self.player_layers[i].set_text(self.player_digits[i],5,8)
-                    #self.game.coils.knocker_rampUp.pulse(15)
+                    self.game.coils.knocker_rampUp.pulse(15)
 
             #set clear time
             self.delay(name='clear', event_type=None, delay=5.0, handler=self.clear)
