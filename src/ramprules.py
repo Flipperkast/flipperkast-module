@@ -14,7 +14,7 @@ class Ramp_rules(game.Mode):
         # __init__ is wat ie sowieso als eerste uitvoert. Hier kunnen we bv. alle geluiden 'laden'
         def __init__(self, game, priority):
                 super(Ramp_rules, self).__init__(game, priority)
-                self.game.sound.register_sound('ramp_sound', sound_path+"starwars_schieten.mp3")
+                self.game.sound.register_sound('ramp_sound', sound_path+"spin6.wav")
 
         # modestarted net zo: dit doet ie in het begin, beetje dubbelop misschien....
         
@@ -33,6 +33,7 @@ class Ramp_rules(game.Mode):
         #In de les gedaan, alleen stond dat toen nog in generalplay.py in plaats van in een losse ramprules.py:
         def sw_rampenter_active(self,sw):
              self.game.sound.play("ramp_sound")
+             self.game.effects.flash_top_mid()
              self.game.score(5000)
 
         #Dit is nieuwe code, om wat meer spel te krijgen met echte 'regels' met een variabele verwerkt
@@ -89,7 +90,7 @@ class Ramp_rules(game.Mode):
                 if self.ramp_aantal_geschoten==2:
                         self.game.score(250000)
                         self.energyscore=250000
-                if self.ramp_aantal_geschoten==4:
+                if self.ramp_aantal_geschoten==1:
                         self.game.score(100000)
                         self.energyscore=100000
                 self.game.coils.TopFlash3.schedule(schedule=0x0f0f0f0f, cycle_seconds=1, now=True)

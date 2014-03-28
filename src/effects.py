@@ -102,6 +102,10 @@ class Effects(game.Mode):
                  self.game.coils.RampLow_EnergyFlash.pulse(35)
                  print 'rampdown'
 
+        def flash_top_mid(self):
+             self.game.coils.Solenoidselect.schedule(schedule=0xffffffff, cycle_seconds=0.6, now=True)
+             self.game.coils.trough.schedule(schedule=0xff00ff00, cycle_seconds=0.5, now=True)
+
 
 # Music control
 

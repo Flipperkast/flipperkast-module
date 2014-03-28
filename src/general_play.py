@@ -10,7 +10,7 @@ from procgame import *
 # Dit importeert alle code uit het bestand 'ramprules.py'
 from ramprules import *
 from bumpers import *
-
+from visor import *
 
 # all paths
 game_path = "C:\P-ROC\pyprocgame-master\games\VXtra_start/"
@@ -28,9 +28,11 @@ class Generalplay(game.Mode):
             # register modes: hij maakt van de code die onder 'Ramp_rules' staat een object. Het nummer gaat over prioriteit die bv belangrijk is voor animaties: 
             self.ramp_rules = Ramp_rules(self.game, 38)
             self.bumper_rules = Bumpers(self.game, 20)
+            self.visor_rules = Visor(self.game, 38)
             
             #register sound effects files
             self.game.sound.register_sound('slingshot', sound_path+"slings.aiff")
+            self.game.sound.register_sound('prepare', speech_path+"prepare_to_fire.wav")
             
             # register music
             self.game.sound.register_music('starwars', music_path+"starwars_intro.mp3")
@@ -57,12 +59,15 @@ class Generalplay(game.Mode):
              # Bij het begin start ie dus de code uit het object ramprules 
              self.game.modes.add(self.ramp_rules)
              self.game.modes.add(self.bumper_rules)
+             self.game.modes.add(self.visor_rules)
              self.game.sound.play_music('starwars', loops=-1)
+             self.game.sound.play('prepare')
 
 
         def mode_stopped(self):
              self.game.modes.remove(self.ramp_rules)
              self.game.modes.remove(self.bumper_rules)
+             self.game.modes.remove(self.visor_rules)
 
         def mode_tick(self):
              pass
