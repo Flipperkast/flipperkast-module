@@ -33,36 +33,38 @@ class Visor(game.Mode):
 ## switches
                 
         def sw_visor1_active(self,sw):
-                if self.visor1==0:
-                        self.game.sound.play("visor_uit")
-                        self.visor1=1
-                if self.visor1==1:
-                        self.game.sound.play("visor_aan")
-                self.game.score(100)
-                self.update_lamps()
+             self.game.sound.play("visor_uit")
+             self.game.score(10)
+             if self.visor1 < 5: self.visor1 += 1
+             self.update_lamps()
+             print "Visor 1 is nu: " , self.visor1
 
         def sw_visor2_active(self,sw):
              self.game.sound.play("visor_uit")
              self.game.score(10)
-             self.visor2 += 1
+             if self.visor2 < 5: self.visor2 += 1
+             self.update_lamps()
              print "Visor 2 is nu: " , self.visor2
              
         def sw_visor3_active(self,sw):
              self.game.sound.play("visor_uit")
              self.game.score(10)
-             self.visor3 += 1
+             if self.visor3 < 5: self.visor3 += 1
+             self.update_lamps()
              print "Visor 3 is nu: " , self.visor3
              
         def sw_visor4_active(self,sw):
              self.game.sound.play("visor_uit")
              self.game.score(10)
-             self.visor4 += 1
+             if self.visor4 < 5: self.visor4 += 1
+             self.update_lamps()
              print "Visor 4 is nu: " , self.visor4
              
         def sw_visor5_active(self,sw):
              self.game.sound.play("visor_uit")
              self.game.score(10)
-             self.visor5 += 1
+             if self.visor5 < 5: self.visor5 += 1
+             self.update_lamps()
              print "Visor 5 is nu: " , self.visor5
 
 
@@ -71,6 +73,17 @@ class Visor(game.Mode):
 ## Lampen
 
         def update_lamps(self):
+		for x in range(self.visor1):
+				self.game.effects.drive_lamp('yellow' + str(x+1), 'on')
+		for x in range(self.visor2):
+				self.game.effects.drive_lamp('blue' + str(x+1), 'on')
+		for x in range(self.visor3):
+				self.game.effects.drive_lamp('orange' + str(x+1), 'on')
+		for x in range(self.visor4):
+				self.game.effects.drive_lamp('green' + str(x+1), 'on')
+		for x in range(self.visor5):
+				self.game.effects.drive_lamp('red' + str(x+1), 'on')
+		"""
                 if self.visor1==1:
                         self.game.effects.drive_lamp('yellow1','on')
                         self.game.effects.drive_lamp('yellow2','on')
@@ -83,6 +96,7 @@ class Visor(game.Mode):
                         self.game.effects.drive_lamp('yellow3','medium')
                         self.game.effects.drive_lamp('yellow4','medium')
                         self.game.effects.drive_lamp('yellow5','medium')
+		"""
 
 ## Mode functions
         

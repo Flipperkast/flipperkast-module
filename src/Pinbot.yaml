@@ -230,17 +230,17 @@ PRLamps:
         number: L11
     match:
         number: L12
-    shootagain:
-        number: L13
     ballinplay:
+        number: L13
+    mouth1:
         number: L14
-    5:
+    mouth2:
         number: L15
-    6:
+    mouth3:
         number: L16
-    7:
+    mouth4:
         number: L17
-    8:
+    mouth5:
         number: L18
     2x:
         number: L21
@@ -290,7 +290,7 @@ PRLamps:
         number: L47
     yellow5:
         number: L48
-    shootagain:
+    shootAgain:
         number: L51
     score_energy:
         number: L52
@@ -302,9 +302,9 @@ PRLamps:
         number: L55
     blue3:
         number: L56
-    bonus10k:
+    blue4:
         number: L57
-    bonus20k:
+    blue5:
         number: L58
     droptop:
         number: L61
@@ -312,15 +312,15 @@ PRLamps:
         number: L62
     dropbottom:
         number: L63
-    shootAgain:
+    orange1:
         number: L64
-    bonus1000:
+    orange2:
         number: L65
-    bonus2000:
+    orange3:
         number: L66
-    bonus3000:
+    orange4:
         number: L67
-    bonus4000:
+    orange5:
         number: L68
     Loutlane:
         number: L71
@@ -328,15 +328,15 @@ PRLamps:
         number: L72
     special:
         number: L73
-    bonus8000:
+    green1:
         number: L74
-    bonus9000:
+    green2:
         number: L75
-    Cextraball:
+    green3:
         number: L76
-    detourwhenlit:
+    green4:
         number: L77
-    not_used:
+    green5:
         number: L78
     Routlane:
         number: L81

@@ -10,7 +10,7 @@ import locale
 import random
 
 #all necessary paths
-game_path = "C:\P-ROC\pyprocgame-dev\games\VXtra_start/"
+game_path = "C:\P-ROC\pyprocgame-master\games\VXtra_start/"
 speech_path = game_path +"sound/speech/"
 sound_path = game_path +"sound/fx/"
 music_path = game_path +"sound/music/"
@@ -63,7 +63,7 @@ class Match(game.Mode):
 
         def play_anim(self):
 
-            anim = dmd.Animation().load(dmd_path+'gate_open.dmd')
+            anim = dmd.Animation().load(dmd_path+'spaceship.dmd')
             self.animation_layer = dmd.AnimatedLayer(frames=anim.frames,opaque=False,frame_time=4)
             self.animation_layer.composite_op = "blacksrc"
             self.animation_layer.add_frame_listener(15,self.generate_match)
