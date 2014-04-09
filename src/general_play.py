@@ -4,6 +4,8 @@
 import procgame
 import locale
 import logging
+from os import listdir
+from os.path import isfile, join
 from time import time
 from procgame import *
 
@@ -19,6 +21,7 @@ sound_path = game_path +"sound/fx/"
 music_path = game_path +"sound/music/"
 dmd_path = game_path +"dmd/"
 lampshow_path = game_path +"lampshows/"
+supported_sound = ['wav', 'aif']
 
 class Generalplay(game.Mode):
 
@@ -55,6 +58,23 @@ class Generalplay(game.Mode):
         def reset(self):
              pass
 
+             
+        def register_all_sounds(self):
+             for (dirpath, dirnames, filenames) in walk(speech_path):
+                for filename in filenames:
+                    if filename.split('.')[-1] in supported_sound:
+                        self.game.sound.register_sound("speech_" + splitext(filename)[0].replace(" ", "_"), speech_path+filename)
+                        
+             for (dirpath, dirnames, filenames) in walk(sound_path):
+                for filename in filenames:
+                    if filename.split('.')[-1] in supported_sound:
+                        self.game.sound.register_sound("sound_" + splitext(filename)[0].replace(" ", "_"), sound_path+filename)
+                        
+             for (dirpath, dirnames, filenames) in walk(music_path):
+                for filename in filenames:
+                    if filename.split('.')[-1] in supported_sound:
+                        self.game.sound.register_sound("music_" + splitext(filename)[0].replace(" ", "_"), music_path+filename)
+                        
         def mode_started(self):
              # Bij het begin start ie dus de code uit het object ramprules 
              self.game.modes.add(self.ramp_rules)
