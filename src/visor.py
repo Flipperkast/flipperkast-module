@@ -14,19 +14,16 @@ class Visor(game.Mode):
 
         def __init__(self, game, priority):
                 super(Visor, self).__init__(game, priority)
-                self.game.sound.register_sound('visor_aan', sound_path+"lasergun1.wav")
-                self.game.sound.register_sound('visor_uit', sound_path+"lasergun2.wav")
+				#Niet meer nodig omdat alle geluiden al zijn geregristreerd bij general_play
+                #self.game.sound.register_sound('visor_aan', sound_path+"lasergun1.wav")
+                #self.game.sound.register_sound('visor_uit', sound_path+"lasergun2.wav")
                 self.game.lampctrl.register_show('lampshow_visor' ,lampshow_path +"Pinbot_1.lampshow")
                 
 
         def mode_started(self):
                 print "visor_mode started"
-                self.visor1=0
-                self.visor2=0
-                self.visor3=0
-                self.visor4=0
-                self.visor5=0
-                self.color
+                self.colors = ['yellow', 'blue', 'orange', 'green', 'red']
+				self.visor = [0,0,0,0,0]
                 self.game.lampctrl.play_show('lampshow_visor', repeat=True)
 
         def mode_stopped(self):
@@ -34,58 +31,39 @@ class Visor(game.Mode):
 
                 
 ## switches
-                
+        
+		def update_visor(self, num):
+			 self.game.lampctrl.stop_show()
+			 self.game.sound.play("sound_lasergun2")
+			 self.game.score(10)
+			 if self.visor[num] < 5: self.visor[num] += 1
+			 self.update_lamps()
+			 print "Visor", num , "is nu:", self.visor[num]
+			 
         def sw_visor1_active(self,sw):
-             self.game.lampctrl.stop_show()   
-             self.game.sound.play("visor_uit")
-             self.game.score(10)
-             if self.visor[0] < 5: self.visor[0] += 1
-             self.update_lamps()
-             print "Visor 1 is nu: " , self.visor[0]
+             self.update_visor(0)
 
         def sw_visor2_active(self,sw):
-             self.game.lampctrl.stop_show()   
-             self.game.sound.play("visor_uit")
-             self.game.score(10)
-             if self.visor[1] < 5: self.visor[1] += 1
-             self.update_lamps()
-             print "Visor 2 is nu: " , self.visor[1]
+             self.update_visor(1)
              
         def sw_visor3_active(self,sw):
-             self.game.lampctrl.stop_show()   
-             self.game.sound.play("visor_uit")
-             self.game.score(10)
-             if self.visor[2] < 5: self.visor[2] += 1
-             self.update_lamps()
-             print "Visor 3 is nu: " , self.visor[2]
+             self.update_visor(2)
              
         def sw_visor4_active(self,sw):
-             self.game.lampctrl.stop_show()
-             self.game.sound.play("visor_uit")
-             self.game.score(10)
-             if self.visor[3] < 5: self.visor[3] += 1
-             self.update_lamps()
-             print "Visor 4 is nu: " , self.visor[3]
+             self.update_visor(3)
              
         def sw_visor5_active(self,sw):
-             self.game.lampctrl.stop_show()   
-             self.game.sound.play("visor_uit")
-             self.game.score(10)
-             if self.visor[4] < 5: self.visor[4] += 1
-             self.update_lamps()
-             print "Visor 5 is nu: " , self.visor[4]
-
-
-
+             self.update_visor(4)
 
 ## Lampen
 
         def update_lamps(self):
                 if sum(self.visor) == 25:
-
-                for x in self.visor:
+					#Hier moet de visor opening open worden gedaan
+					pass
+                for x in range(len(self.visor)):
                         for y in range(self.visor[x]):
-                                self.game.effects.drive_lamp('yellow' + str(x+1), 'on')
+                                self.game.effects.drive_lamp(self.colors[x] + str(x+1), 'on')
                 
 
 ## Mode functions
