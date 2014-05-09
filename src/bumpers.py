@@ -14,9 +14,10 @@ class Bumpers(game.Mode):
 
         def __init__(self, game, priority):
                 super(Bumpers, self).__init__(game, priority)
-                self.game.sound.register_sound('bumper1', sound_path+"lasergun1.wav")
-                self.game.sound.register_sound('bumper2', sound_path+"lasergun2.wav")
-                self.game.sound.register_sound('bumper3', sound_path+"lasergun3.wav")
+				#Dit hoeft niet meer omdat alle geluiden nu worden geregistreerd in general_play
+                #self.game.sound.register_sound('bumper1', sound_path+"lasergun1.wav")
+                #self.game.sound.register_sound('bumper2', sound_path+"lasergun2.wav")
+                #self.game.sound.register_sound('bumper3', sound_path+"lasergun3.wav")
                 
 
         def mode_started(self):
@@ -29,19 +30,19 @@ class Bumpers(game.Mode):
 ## switches
                 
         def sw_Ubumper_active(self,sw):
-             self.game.sound.play("bumper1")
+             self.game.sound.play("sound_lasergun1")
              self.game.score(10)
              self.energyflash()
              self.bumpers_animation() 
 
         def sw_Bbumper_active(self,sw):
-             self.game.sound.play("bumper3")
+             self.game.sound.play("sound_lasergun3")
              self.game.score(10)
              self.energyflash()
              self.bumpers_animation() 
 
         def sw_Lbumper_active(self,sw):
-             self.game.sound.play("bumper2")
+             self.game.sound.play("sound_lasergun2")
              self.game.score(10)
              self.energyflash()
              self.bumpers_animation()   

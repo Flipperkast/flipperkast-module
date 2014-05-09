@@ -14,7 +14,8 @@ class Ramp_rules(game.Mode):
         # __init__ is wat ie sowieso als eerste uitvoert. Hier kunnen we bv. alle geluiden 'laden'
         def __init__(self, game, priority):
                 super(Ramp_rules, self).__init__(game, priority)
-                self.game.sound.register_sound('ramp_sound', sound_path+"spin6.wav")
+				#Dit hoeft niet meer, geluiden worden geregistreerd in general_play
+                #self.game.sound.register_sound('ramp_sound', sound_path+"spin6.wav")
 
         # modestarted net zo: dit doet ie in het begin, beetje dubbelop misschien....
         
@@ -32,7 +33,7 @@ class Ramp_rules(game.Mode):
                 
         #In de les gedaan, alleen stond dat toen nog in generalplay.py in plaats van in een losse ramprules.py:
         def sw_rampenter_active(self,sw):
-             self.game.sound.play("ramp_sound")
+             self.game.sound.play("sound_spin6")
              self.game.effects.flash_top_mid()
              self.game.score(5000)
 
