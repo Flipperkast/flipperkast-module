@@ -5,7 +5,7 @@ import procgame
 import locale
 import logging
 from os import listdir
-from os.path import isfile, join
+from os.path import isfile, join, splitext
 from time import time
 from procgame import *
 
@@ -16,30 +16,34 @@ from visor import *
 
 # all paths
 game_path = "C:\P-ROC\pyprocgame-master\games\VXtra_start/"
-speech_path = game_path +"sound/speech/"
+speech_path = game_path+"sound/speech/"
 sound_path = game_path +"sound/fx/"
 music_path = game_path +"sound/music/"
 dmd_path = game_path +"dmd/"
 lampshow_path = game_path +"lampshows/"
-supported_sound = ['wav', 'aif']
+supported_sound = ['wav', 'aif', 'ogg', 'mp3']
 
 class Generalplay(game.Mode):
 
         def __init__(self, game, priority):
             super(Generalplay, self).__init__(game, priority)
 
-            # register modes: hij maakt van de code die onder 'Ramp_rules' staat een object. Het nummer gaat over prioriteit die bv belangrijk is voor animaties: 
-            self.ramp_rules = Ramp_rules(self.game, 38)
-            self.bumper_rules = Bumpers(self.game, 20)
-            self.visor_rules = Visor(self.game, 38)
+            # register modes: hij maakt van de code die onder 'Ramp_rules' staat een object. Het nummer gaat over prioriteit die bv belangrijk is voor animaties:
             
-            #register sound effects files
-            self.game.sound.register_sound('slingshot', sound_path+"slings.aiff")
-            self.game.sound.register_sound('prepare', speech_path+"prepare_to_fire.wav")
-            
-            # register music
-            self.game.sound.register_music('starwars', music_path+"starwars_intro.mp3")
-            self.game.sound.register_music('starwars_music', music_path+"starwars_theme.mp3")
+##            self.ramp_rules = Ramp_rules(self.game, 38)
+##            self.bumper_rules = Bumpers(self.game, 20)
+##            self.visor_rules = Visor(self.game, 38)
+##            
+##            #register sound effects files
+##            self.game.sound.register_sound('slingshot', sound_path+"slings.aiff")
+##            self.game.sound.register_sound('prepare', speech_path+"prepare_to_fire.wav")
+##            
+##            # register music
+##            self.game.sound.register_music('starwars', music_path+"starwars_intro.mp3")
+##            self.game.sound.register_music('starwars_music', music_path+"starwars_theme.mp3")
+
+            #register all sounds!
+            register_all_sounds()
             
             #register animation layers
 ##            self.showroom_text = dmd.TextLayer(70, 22, self.game.fonts['07x5'], "center", opaque=False)
@@ -62,26 +66,26 @@ class Generalplay(game.Mode):
         def register_all_sounds(self):
              for (dirpath, dirnames, filenames) in walk(speech_path):
                 for filename in filenames:
-                    if filename.split('.')[-1] in supported_sound:
-                        self.game.sound.register_sound("speech_" + splitext(filename)[0].replace(" ", "_"), speech_path+filename)
+                    if splitext(filename)[1] in supported_sound:
+                        self.game.sound.register_sound("speech_" + splitext(filename)[0].replace(" ", "_"), join(dirpath, filename))
                         
              for (dirpath, dirnames, filenames) in walk(sound_path):
                 for filename in filenames:
-                    if filename.split('.')[-1] in supported_sound:
-                        self.game.sound.register_sound("sound_" + splitext(filename)[0].replace(" ", "_"), sound_path+filename)
+                    if splitext(filename)[1] in supported_sound:
+                        self.game.sound.register_sound("sound_" + splitext(filename)[0].replace(" ", "_"), join(dirpath, filename))
                         
              for (dirpath, dirnames, filenames) in walk(music_path):
                 for filename in filenames:
-                    if filename.split('.')[-1] in supported_sound:
-                        self.game.sound.register_sound("music_" + splitext(filename)[0].replace(" ", "_"), music_path+filename)
+                    if splitext(filename)[1] in supported_sound:
+                        self.game.sound.register_sound("music_" + splitext(filename)[0].replace(" ", "_"), join(dirpath, filename))
                         
         def mode_started(self):
              # Bij het begin start ie dus de code uit het object ramprules 
              self.game.modes.add(self.ramp_rules)
              self.game.modes.add(self.bumper_rules)
              self.game.modes.add(self.visor_rules)
-             self.game.sound.play_music('starwars', loops=-1)
-             self.game.sound.play('prepare')
+             self.game.sound.play_music('music_starwars_intro', loops=-1)
+             self.game.sound.play('speech_prepare_to_fire')
 
 
         def mode_stopped(self):
@@ -133,7 +137,7 @@ class Generalplay(game.Mode):
              self.game.coils.RvisorGI.schedule(schedule=0x0f0f0f0f, cycle_seconds=1, now=True) 
              print "flashers moeten nu gaan"
              self.start_time = time()
-             self.game.sound.play_music('starwars_music', loops=-1)
+             self.game.sound.play_music('music_starwars_theme', loops=-1)
              
         def sw_eject_active_for_1400ms(self, sw):
              self.game.coils.Ejecthole_LeftInsBFlash.pulse(40)
