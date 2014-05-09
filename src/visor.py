@@ -26,6 +26,7 @@ class Visor(game.Mode):
                 self.visor3=0
                 self.visor4=0
                 self.visor5=0
+                self.color
                 self.game.lampctrl.play_show('lampshow_visor', repeat=True)
 
         def mode_stopped(self):
@@ -38,41 +39,41 @@ class Visor(game.Mode):
              self.game.lampctrl.stop_show()   
              self.game.sound.play("visor_uit")
              self.game.score(10)
-             if self.visor1 < 5: self.visor1 += 1
+             if self.visor[0] < 5: self.visor[0] += 1
              self.update_lamps()
-             print "Visor 1 is nu: " , self.visor1
+             print "Visor 1 is nu: " , self.visor[0]
 
         def sw_visor2_active(self,sw):
              self.game.lampctrl.stop_show()   
              self.game.sound.play("visor_uit")
              self.game.score(10)
-             if self.visor2 < 5: self.visor2 += 1
+             if self.visor[1] < 5: self.visor[1] += 1
              self.update_lamps()
-             print "Visor 2 is nu: " , self.visor2
+             print "Visor 2 is nu: " , self.visor[1]
              
         def sw_visor3_active(self,sw):
              self.game.lampctrl.stop_show()   
              self.game.sound.play("visor_uit")
              self.game.score(10)
-             if self.visor3 < 5: self.visor3 += 1
+             if self.visor[2] < 5: self.visor[2] += 1
              self.update_lamps()
-             print "Visor 3 is nu: " , self.visor3
+             print "Visor 3 is nu: " , self.visor[2]
              
         def sw_visor4_active(self,sw):
              self.game.lampctrl.stop_show()
              self.game.sound.play("visor_uit")
              self.game.score(10)
-             if self.visor4 < 5: self.visor4 += 1
+             if self.visor[3] < 5: self.visor[3] += 1
              self.update_lamps()
-             print "Visor 4 is nu: " , self.visor4
+             print "Visor 4 is nu: " , self.visor[3]
              
         def sw_visor5_active(self,sw):
              self.game.lampctrl.stop_show()   
              self.game.sound.play("visor_uit")
              self.game.score(10)
-             if self.visor5 < 5: self.visor5 += 1
+             if self.visor[4] < 5: self.visor[4] += 1
              self.update_lamps()
-             print "Visor 5 is nu: " , self.visor5
+             print "Visor 5 is nu: " , self.visor[4]
 
 
 
@@ -80,18 +81,12 @@ class Visor(game.Mode):
 ## Lampen
 
         def update_lamps(self):
-                if self.visor1 + self.visor2 + self.visor3 + self.visor4 + self.visor5 == 25:
-                        
-                for x in range(self.visor1):
-                        self.game.effects.drive_lamp('yellow' + str(x+1), 'on')
-                for x in range(self.visor2):
-                        self.game.effects.drive_lamp('blue' + str(x+1), 'on')
-                for x in range(self.visor3):
-                        self.game.effects.drive_lamp('orange' + str(x+1), 'on')
-                for x in range(self.visor4):
-                        self.game.effects.drive_lamp('green' + str(x+1), 'on')
-                for x in range(self.visor5):
-                        self.game.effects.drive_lamp('red' + str(x+1), 'on')
+                if sum(self.visor) == 25:
+
+                for x in self.visor:
+                        for y in range(self.visor[x]):
+                                self.game.effects.drive_lamp('yellow' + str(x+1), 'on')
+                
 
 ## Mode functions
         
