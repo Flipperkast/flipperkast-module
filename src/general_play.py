@@ -21,7 +21,7 @@ sound_path = game_path +"sound/fx/"
 music_path = game_path +"sound/music/"
 dmd_path = game_path +"dmd/"
 lampshow_path = game_path +"lampshows/"
-supported_sound = ['wav', 'aif', 'ogg', 'mp3']
+supported_sound = ['.wav', '.aiff', '.ogg', '.mp3']
 
 class Generalplay(game.Mode):
 
@@ -61,9 +61,9 @@ class Generalplay(game.Mode):
 
         def reset(self):
              pass
-
-             
-        def register_all_sounds(self):
+           
+        def mode_started(self):
+             # Bij het begin start ie dus de code uit het object ramprules 
              for (dirpath, dirnames, filenames) in walk(speech_path):
                 for filename in filenames:
                     if splitext(filename)[1] in supported_sound:
@@ -78,9 +78,6 @@ class Generalplay(game.Mode):
                 for filename in filenames:
                     if splitext(filename)[1] in supported_sound:
                         self.game.sound.register_sound("music_" + splitext(filename)[0].replace(" ", "_"), join(dirpath, filename))
-                        
-        def mode_started(self):
-             # Bij het begin start ie dus de code uit het object ramprules 
              self.game.modes.add(self.ramp_rules)
              self.game.modes.add(self.bumper_rules)
              self.game.modes.add(self.visor_rules)

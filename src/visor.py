@@ -9,6 +9,7 @@ speech_path = game_path +"sound/speech/"
 sound_path = game_path +"sound/fx/"
 music_path = game_path +"sound/music/"
 dmd_path = game_path +"dmd/"
+lampshow_path = game_path +"lampshows/"
 
 class Visor(game.Mode):
 
@@ -23,7 +24,7 @@ class Visor(game.Mode):
         def mode_started(self):
                 print "visor_mode started"
                 self.colors = ['yellow', 'blue', 'orange', 'green', 'red']
-				self.visor = [0,0,0,0,0]
+                self.visor = [0,0,0,0,0]
                 self.game.lampctrl.play_show('lampshow_visor', repeat=True)
 
         def mode_stopped(self):
@@ -31,14 +32,13 @@ class Visor(game.Mode):
 
                 
 ## switches
-        
-		def update_visor(self, num):
-			 self.game.lampctrl.stop_show()
-			 self.game.sound.play("sound_lasergun2")
-			 self.game.score(10)
-			 if self.visor[num] < 5: self.visor[num] += 1
-			 self.update_lamps()
-			 print "Visor", num , "is nu:", self.visor[num]
+        def update_visor(self, num):
+                 self.game.lampctrl.stop_show()
+                 self.game.sound.play("sound_lasergun2")
+                 self.game.score(10)
+                 if self.visor[num] < 5: self.visor[num] += 1
+                 self.update_lamps()
+                 print "Visor", num , "is nu:", self.visor[num]
 			 
         def sw_visor1_active(self,sw):
              self.update_visor(0)
@@ -59,11 +59,10 @@ class Visor(game.Mode):
 
         def update_lamps(self):
                 if sum(self.visor) == 25:
-					#Hier moet de visor opening open worden gedaan
-					pass
+                        pass
                 for x in range(len(self.visor)):
                         for y in range(self.visor[x]):
-                                self.game.effects.drive_lamp(self.colors[x] + str(x+1), 'on')
+                                self.game.effects.drive_lamp(self.colors[x] + str(y+1), 'on')
                 
 
 ## Mode functions
