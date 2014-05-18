@@ -734,6 +734,7 @@ class rkPlayer(game.Player):
 
                 self.player_stats = {}
                 self.player_stats['status']=''
+                self.visor_position='up'
 
 
 def main():

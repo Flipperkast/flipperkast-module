@@ -13,6 +13,7 @@ from procgame import *
 from ramprules import *
 from bumpers import *
 from visor import *
+from visor_up_down import *
 
 # all paths
 game_path = "C:\P-ROC\pyprocgame-master\games\VXtra_start/"
@@ -30,9 +31,10 @@ class Generalplay(game.Mode):
 
             # register modes: hij maakt van de code die onder 'Ramp_rules' staat een object. Het nummer gaat over prioriteit die bv belangrijk is voor animaties:
             
-##            self.ramp_rules = Ramp_rules(self.game, 38)
-##            self.bumper_rules = Bumpers(self.game, 20)
-##            self.visor_rules = Visor(self.game, 38)
+            self.ramp_rules = Ramp_rules(self.game, 38)
+            self.bumper_rules = Bumpers(self.game, 20)
+            self.visor_rules = Visor(self.game, 38)
+            self.visor_up_down = Visor_up_down(self.game 40)
 ##            
 ##            #register sound effects files
 ##            self.game.sound.register_sound('slingshot', sound_path+"slings.aiff")
@@ -41,9 +43,6 @@ class Generalplay(game.Mode):
 ##            # register music
 ##            self.game.sound.register_music('starwars', music_path+"starwars_intro.mp3")
 ##            self.game.sound.register_music('starwars_music', music_path+"starwars_theme.mp3")
-
-            #register all sounds!
-            register_all_sounds()
             
             #register animation layers
 ##            self.showroom_text = dmd.TextLayer(70, 22, self.game.fonts['07x5'], "center", opaque=False)
@@ -64,6 +63,7 @@ class Generalplay(game.Mode):
            
         def mode_started(self):
              # Bij het begin start ie dus de code uit het object ramprules 
+             # Register all sounds!
              for (dirpath, dirnames, filenames) in walk(speech_path):
                 for filename in filenames:
                     if splitext(filename)[1] in supported_sound:
