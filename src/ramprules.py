@@ -33,6 +33,7 @@ class Ramp_rules(game.Mode):
                 
         #In de les gedaan, alleen stond dat toen nog in generalplay.py in plaats van in een losse ramprules.py:
         def sw_rampenter_active(self,sw):
+             self.play_animation_spaceship()   
              self.game.sound.play("sound_spin6")
              self.game.effects.flash_top_mid()
              self.game.score(5000)
@@ -101,14 +102,11 @@ class Ramp_rules(game.Mode):
                      
 ## Animations
                 
-        def score_energy_animation(self):
-                pass
-##                self.title_layer = dmd.TextLayer(110, 2, self.game.fonts['num_09Bx7'], "center", opaque=False) #num_09Bx7 num_14x10
-##                self.title_layer.set_text(str(self.energyscore),True)  
-##                anim = dmd.Animation().load(dmd_path+'slings.dmd')
-##                self.animation_layer = dmd.AnimatedLayer(frames=anim.frames, opaque=False, repeat=False, hold=False, frame_time=4)
-##                self.layer = dmd.GroupedLayer(128, 32, [self.animation_layer, self.title_layer])
-##                self.delay(name='clear_layer', event_type=None, delay=3, handler=self.clear_layer)
+        def play_animation_spaceship(self):
+                anim = dmd.Animation().load(dmd_path+'spaceship.dmd')
+                self.animation_layer = dmd.AnimatedLayer(frames=anim.frames, opaque=False, repeat=False, hold=False, frame_time=4)
+                self.layer = dmd.GroupedLayer(128, 32, [self.animation_layer])
+                self.delay(name='clear_layer', event_type=None, delay=6, handler=self.clear_layer)
             
         def clear_layer(self):
              self.layer = None

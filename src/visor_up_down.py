@@ -12,12 +12,11 @@ lampshow_path = game_path +"lampshows/"
 class Visor_up_down(game.Mode):
 
         def __init__(self, game, priority):
-                super(Visor, self).__init__(game, priority)
+                super(Visor_up_down, self).__init__(game, priority)
 
         def mode_started(self):
-                self.visor = self.game.switches.visorClosed.is_active():
-                if self.game.current_player().visor_position=='up' and not self.visor:
-                        self.visor_up()
+                if self.game.current_player().visor_position=='up' and not self.visor_active():
+                        self.visor_move()
 
         def mode_stopped(self):
                 pass
@@ -30,9 +29,5 @@ class Visor_up_down(game.Mode):
                 
 ## switches
                 
-        def sw_visorClosed_active(self,sw):
-                self.game.coils.Visormotor.disable()
 
-        def sw_visorOpen_active(self,sw):
-                self.game.coils.Visormotor.disable()
 

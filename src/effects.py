@@ -103,8 +103,8 @@ class Effects(game.Mode):
                  print 'rampdown'
 
         def flash_top_mid(self):
-             self.game.coils.Solenoidselect.schedule(schedule=0xffffffff, cycle_seconds=0.6, now=True)
-             self.game.coils.trough.schedule(schedule=0xff00ff00, cycle_seconds=0.5, now=True)
+             self.game.coils.Solenoidselect.schedule(schedule=0xffffffff, cycle_seconds=1, now=False)
+             self.game.coils.trough.schedule(schedule=0xff00ff00, cycle_seconds=1, now=False)
 
 
 # Music control
@@ -130,7 +130,16 @@ class Effects(game.Mode):
              #outhole
              if self.game.switches.outhole.is_active():
                  self.game.coils.outhole_knocker.pulse(30)
-
+             if self.game.switches.Leject.is_active():
+                 self.game.coils.Lejecthole_LeftPlFlash.pulse(30)   
+             if self.game.switches.Reject.is_active():
+                 self.game.coils.Rejecthole_SunFlash.pulse(30)
+             if self.game.switches.eject.is_active():
+                 self.game.coils.Ejecthole_LeftInsBFlash.pulse(30)
+             if self.game.switches.visorOpen.is_active():
+                 self.delay(name='visor_closing' , event_type=None, delay=3, handler=self.game.visor_up_down.visor_move)
+    
+                 
         def eject_ball(self, location='all'):
              pass   
              #left eject

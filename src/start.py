@@ -6,6 +6,7 @@ import pinproc
 from effects import *
 from general_play import *
 from match import *
+from visor_up_down import *
 from procgame import *
 from threading import Thread
 from random import *
@@ -598,6 +599,8 @@ class Game(game.BasicGame):
         self.effects = Effects(self)
         #match mode
         self.match = Match(self,10)
+        #updown ding
+        self.visor_up_down = Visor_up_down(self, 10)
         #------------------
 
 
@@ -735,6 +738,8 @@ class rkPlayer(game.Player):
                 self.player_stats = {}
                 self.player_stats['status']=''
                 self.visor_position='up'
+                self.visor_lamps = [0,0,0,0,0]
+                self.visor_balls = 0
 
 
 def main():

@@ -24,7 +24,6 @@ class Visor(game.Mode):
         def mode_started(self):
                 print "visor_mode started"
                 self.colors = ['yellow', 'blue', 'orange', 'green', 'red']
-                self.visor = [0,0,0,0,0]
                 self.game.lampctrl.play_show('lampshow_visor', repeat=True)
 
         def mode_stopped(self):
@@ -36,9 +35,9 @@ class Visor(game.Mode):
                  self.game.lampctrl.stop_show()
                  self.game.sound.play("sound_lasergun2")
                  self.game.score(10)
-                 if self.visor[num] < 5: self.visor[num] += 1
+                 if self.game.current_player().visor_lamps[num] < 5: self.game.current_player().visor_lamps[num] += 1
                  self.update_lamps()
-                 print "Visor", num , "is nu:", self.visor[num]
+                 print "Visor", num , "is nu:", self.game.current_player().visor_lamps[num]
 			 
         def sw_visor1_active(self,sw):
              self.update_visor(0)
@@ -54,14 +53,62 @@ class Visor(game.Mode):
              
         def sw_visor5_active(self,sw):
              self.update_visor(4)
+             
+        def sw_Rbank1_active(self,sw):
+             self.update_visor(0)
 
+        def sw_Rbank2_active(self,sw):
+             self.update_visor(1)
+             
+        def sw_Rbank3_active(self,sw):
+             self.update_visor(2)
+             
+        def sw_Rbank4_active(self,sw):
+             self.update_visor(3)
+             
+        def sw_Rbank5_active(self,sw):
+             self.update_visor(4)
+             
+        def sw_visorClosed_active(self,sw):
+                print "Visor closed"
+                self.game.coils.Visormotor.disable()
+
+        def sw_visorOpen_active(self,sw):
+                self.game.coils.Visormotor.disable()
+
+        def sw_Leject_active_for_100ms(self,sw):
+                if self.game.current_player().visor_balls == 0:
+                        self.game.current_player().visor_balls = 1
+                        self.game.coils.trough.pulse(50)       
+                elif self.game.current_player().visor_balls == 1:
+                        self.game.coils.Rejecthole_SunFlash.pulse(50)
+                        self.game.coils.Lejecthole_LeftPlFlash.pulse(50)
+                        self.game.current_player().visor_balls = 0
+                        self.game.current_player().visor_lamps = [0,0,0,0,0]
+                        self.delay(name='visor_closing' , event_type=None, delay=1, handler=self.game.visor_up_down.visor_move)
+                        self.update_lamps()
+                        
+        def sw_Reject_active_for_100ms(self,sw):
+                if self.game.current_player().visor_balls == 0:
+                        self.game.current_player().visor_balls = 1
+                        self.game.coils.trough.pulse(50)
+                elif self.game.current_player().visor_balls == 1:
+                        self.game.coils.Rejecthole_SunFlash.pulse(50)
+                        self.game.coils.Lejecthole_LeftPlFlash.pulse(50)
+                        self.game.current_player().visor_balls = 0
+                        self.game.current_player().visor_lamps = [0,0,0,0,0]
+                        self.delay(name='visor_closing' , event_type=None, delay=1, handler=self.game.visor_up_down.visor_move)
+                        self.update_lamps()
 ## Lampen
 
         def update_lamps(self):
-                if sum(self.visor) == 25:
-                        pass
-                for x in range(len(self.visor)):
-                        for y in range(self.visor[x]):
+                if sum(self.game.current_player().visor_lamps) == 25:
+                        print ("25 visors!")
+                        self.game.current_player().visor_position='up'
+                        if self.game.current_player().visor_position=='up':
+                                self.game.visor_up_down.visor_move()
+                for x in range(len(self.game.current_player().visor_lamps)):
+                        for y in range(self.game.current_player().visor_lamps[x]):
                                 self.game.effects.drive_lamp(self.colors[x] + str(y+1), 'on')
                 
 
