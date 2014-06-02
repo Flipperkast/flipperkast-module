@@ -138,6 +138,8 @@ class Effects(game.Mode):
                  self.game.coils.Ejecthole_LeftInsBFlash.pulse(30)
              if self.game.switches.visorOpen.is_active():
                  self.delay(name='visor_closing' , event_type=None, delay=3, handler=self.game.visor_up_down.visor_move)
+             if self.game.switches.droptarget1.is_active() or self.game.switches.droptarget2.is_active() or self.game.switches.droptarget3.is_active():
+                 self.game.coils.Drops_RightInsBFlash.pulse(30)
     
                  
         def eject_ball(self, location='all'):

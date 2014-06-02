@@ -35,6 +35,7 @@ class Generalplay(game.Mode):
             self.visor_rules = Visor(self.game, 38)
             self.start_time = 0
             
+            self.register_all_sounds()
             #register animation layers
 ##            self.showroom_text = dmd.TextLayer(70, 22, self.game.fonts['07x5'], "center", opaque=False)
 ##            self.showroom_bgnd = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(dmd_path+'showroom.dmd').frames[0])
@@ -54,6 +55,13 @@ class Generalplay(game.Mode):
            
         def mode_started(self):
              # Bij het begin start ie dus de code uit het object ramprules 
+             self.game.modes.add(self.ramp_rules)
+             self.game.modes.add(self.bumper_rules)
+             self.game.modes.add(self.visor_rules)
+             self.game.sound.play_music('music_starwars_intro', loops=-1)
+             self.game.sound.play('speech_Prepare_to_fire')
+        
+        def register_all_sounds(self):
              # Register all sounds!
              for (dirpath, dirnames, filenames) in walk(speech_path):
                 for filename in filenames:
@@ -75,12 +83,6 @@ class Generalplay(game.Mode):
                         sound = "music_" + splitext(filename)[0].replace(" ", "_")
                         print "SOUND REGISTERED:", sound
                         self.game.sound.register_music(sound, join(dirpath, filename))
-             self.game.modes.add(self.ramp_rules)
-             self.game.modes.add(self.bumper_rules)
-             self.game.modes.add(self.visor_rules)
-             self.game.sound.play_music('music_starwars_intro', loops=-1)
-             self.game.sound.play('speech_Prepare_to_fire')
-
 
         def mode_stopped(self):
              self.game.modes.remove(self.ramp_rules)
