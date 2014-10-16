@@ -34,9 +34,9 @@ class Effects(game.Mode):
             elif style == 'medium':
               self.game.lamps[lamp_name].schedule(schedule=0x0f0f0f0f, cycle_seconds=0, now=True)
             elif style == 'fast':
-                self.game.lamps[lamp_name].schedule(schedule=0x55555555, cycle_seconds=0, now=True)
+                self.game.lamps[lamp_name].schedule(schedule=0x44444444, cycle_seconds=0, now=True)
             elif style == 'superfast':
-                self.game.lamps[lamp_name].schedule(schedule=0x99999999, cycle_seconds=0, now=True)
+                self.game.lamps[lamp_name].schedule(schedule=0x93939393, cycle_seconds=0, now=True)
             elif style == 'on':
                 self.game.lamps[lamp_name].enable()
             elif style == 'off':
@@ -102,10 +102,13 @@ class Effects(game.Mode):
                  self.game.coils.RampLow_EnergyFlash.pulse(35)
                  print 'rampdown'
 
-        def flash_top_mid(self):
-             self.game.coils.Solenoidselect.schedule(schedule=0xffffffff, cycle_seconds=1, now=False)
-             self.game.coils.trough.schedule(schedule=0xff00ff00, cycle_seconds=1, now=False)
-
+        def flashers_flash(self, time=1):
+             self.game.coils.Solenoidselect.schedule(schedule=0xffffffff, cycle_seconds=time, now=False)
+             self.game.coils.trough.schedule(schedule=0xf00f00f0, cycle_seconds=time, now=False)
+             self.game.coils.RampRaise_LowPlFlash.schedule(schedule=0x0f00f00f, cycle_seconds=time, now=False)
+             self.game.coils.Lejecthole_LeftPlFlash.schedule(schedule=0x00f00f00, cycle_seconds=time, now=False)
+             self.game.coils.Rejecthole_SunFlash.schedule(schedule=0x0f00f00, cycle_seconds=time, now=False)
+                
 
 # Music control
 
@@ -138,27 +141,28 @@ class Effects(game.Mode):
                  self.game.coils.Ejecthole_LeftInsBFlash.pulse(30)
              if self.game.switches.visorOpen.is_active():
                  self.delay(name='visor_closing' , event_type=None, delay=3, handler=self.game.visor_up_down.visor_move)
-             if self.game.switches.droptarget1.is_active() or self.game.switches.droptarget2.is_active() or self.game.switches.droptarget3.is_active():
-                 self.game.coils.Drops_RightInsBFlash.pulse(30)
+             #if self.game.switches.droptarget1.is_active() or self.game.switches.droptarget2.is_active() or self.game.switches.droptarget3.is_active():
+             self.game.coils.Drops_RightInsBFlash.pulse(100)
     
-                 
+        def throw_ball_delay(self):
+             self.delay(name='throw_ball' , event_type=None, delay=2, handler=self.game.coils.trough.pulse(50))
+
         def eject_ball(self, location='all'):
-             pass   
+             self.game.coils.Solenoidselect.disable()
              #left eject
-##             if location == 'all' or location == 'Leject':
-##                if self.game.switches.Leject.is_active():
-##                    self.game.coils.Leject.pulse(20)
-##
-##             #center eject
-##             if location == 'all' or location == 'Ceject':
-##                if self.game.switches.Ceject.is_active():
-##                    self.game.coils.Ceject.pulse(22)
-##
-##             #upper left kicker
-##             if location == 'all' or location == 'upperLkicker':
-##                if self.game.switches.upperLkicker.is_active():
-##                    self.game.coils.ACselect.pulse(35)
-##                    self.game.coils.rearFlash_upLeftkicker.pulse(30)
+             if location == 'all' or location == 'Leject':
+                if self.game.switches.Leject.is_active():
+                    self.game.coils.Lejecthole_LeftPlFlash.pulse(20)
+
+             #center eject
+             if location == 'all' or location == 'Reject':
+                if self.game.switches.Ceject.is_active():
+                    self.game.coils.Rejecthole_SunFlash.pulse(22)
+
+             #upper left kicker
+             if location == 'all' or location == 'eject':
+                if self.game.switches.eject.is_active():
+                    self.game.coils.Ejecthole_LeftInsBFlash.pulse(30)
 
         def ball_search(self):
              self.game.coils.outhole_knocker.pulse(40)

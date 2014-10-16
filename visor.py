@@ -1,7 +1,7 @@
 # Visor
 
 from procgame import *
-
+from multiball import *
 
 # all paths
 game_path = "C:\P-ROC\pyprocgame-master\games\VXtra_start/"
@@ -25,10 +25,18 @@ class Visor(game.Mode):
                 print "visor_mode started"
                 self.colors = ['yellow', 'blue', 'orange', 'green', 'red']
                 self.game.lampctrl.play_show('lampshow_visor', repeat=True)
-
+                self.multiball = Multiball(self.game, 40)
+##                self.multiball.callback = self.mode_callback
+                
         def mode_stopped(self):
                 self.game.lampctrl.stop_show()
 
+                
+##        def mode_callback(self,mode_name):
+##             #remove the active mode
+##             print("Ending Mode: "+mode_name)
+##             if mode_name == 'multiball':
+##                  self.game.modes.remove(self.multiball)
                 
 ## switches
         def update_visor(self, num):
@@ -72,33 +80,35 @@ class Visor(game.Mode):
         def sw_visorClosed_active(self,sw):
                 print "Visor closed"
                 self.game.coils.Visormotor.disable()
+                       
+        def stop_visor(self):
+                self.game.coils.Visormotor.disable()
 
         def sw_visorOpen_active(self,sw):
-                self.game.coils.Visormotor.disable()
+                self.delay(name='visor_stop' , event_type=None, delay=0.5, handler=self.stop_visor)
 
         def sw_Leject_active_for_100ms(self,sw):
                 if self.game.current_player().visor_balls == 0:
                         self.game.current_player().visor_balls = 1
-                        self.game.coils.trough.pulse(50)       
+                        self.game.trough.launch_balls(1)
+##                        self.game.coils.trough.pulse(50)       
                 elif self.game.current_player().visor_balls == 1:
-                        self.game.coils.Rejecthole_SunFlash.pulse(50)
-                        self.game.coils.Lejecthole_LeftPlFlash.pulse(50)
+                        self.delay(name='start_mb' , event_type=None, delay=1, handler=self.start_multiball)
                         self.game.current_player().visor_balls = 0
                         self.game.current_player().visor_lamps = [0,0,0,0,0]
-                        self.delay(name='visor_closing' , event_type=None, delay=1, handler=self.game.visor_up_down.visor_move)
                         self.update_lamps()
                         
         def sw_Reject_active_for_100ms(self,sw):
                 if self.game.current_player().visor_balls == 0:
                         self.game.current_player().visor_balls = 1
-                        self.game.coils.trough.pulse(50)
+                        self.game.trough.launch_balls(1)
+##                        self.game.coils.trough.pulse(50)
                 elif self.game.current_player().visor_balls == 1:
-                        self.game.coils.Rejecthole_SunFlash.pulse(50)
-                        self.game.coils.Lejecthole_LeftPlFlash.pulse(50)
+                        self.delay(name='start_mb' , event_type=None, delay=1, handler=self.start_multiball)
                         self.game.current_player().visor_balls = 0
                         self.game.current_player().visor_lamps = [0,0,0,0,0]
-                        self.delay(name='visor_closing' , event_type=None, delay=1, handler=self.game.visor_up_down.visor_move)
                         self.update_lamps()
+                        
 ## Lampen
 
         def update_lamps(self):
@@ -111,9 +121,10 @@ class Visor(game.Mode):
                         for y in range(self.game.current_player().visor_lamps[x]):
                                 self.game.effects.drive_lamp(self.colors[x] + str(y+1), 'on')
                 
-
-## Mode functions
         
+## Mode functions
+        def start_multiball(self):
+               self.game.modes.add(self.multiball) 
                      
 ## Animations
                 

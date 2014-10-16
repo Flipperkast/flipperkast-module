@@ -53,8 +53,8 @@ font_07x4 = dmd.Font(fonts_path+"Font07x4.dmd")
 font_07x5 = dmd.Font(fonts_path+"Font07x5.dmd")
 font_09Bx7 = dmd.Font(fonts_path+"Font09Bx7.dmd")
 
-lampshow_files = [lampshow_path +"attract/vertikaal.lampshow", \
-                  lampshow_path +"attract/wisselend.lampshow", ]
+lampshow_files = [lampshow_path +"Pinbot_1.lampshow", \
+                  lampshow_path +"Pinbot_1.lampshow", ]
 
 
 class Attract(game.Mode):
@@ -111,15 +111,26 @@ class Attract(game.Mode):
 #CREDITS#
 
 [Rules and software: ]
-
+[Jelle]
+[]
 [Dots & Animations: ]
-
+[Koen]
+[]
+[Lightshows: ]
+[Franka]
+[Wietske]
+[Maaike]
+[]
 [Music & SFX: ]
-
+[Hylke]
+[]
 [Graphic design:]
-
+[Jelmer]
+[Ruben]
+[Jonas]
+[]
 [Hardware mods:]
-
+[not yet......?]
 """)
 
                 self.credits_layer = dmd.PanningLayer(width=128, height=32, frame=credits_frame, origin=(0,0), translate=(0,1), bounce=False)

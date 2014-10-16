@@ -107,7 +107,8 @@ class Match(game.Mode):
             #for i in range(len(self.player_digits)):
                 if self.player_digits[i] == self.display_value:
                     self.player_layers[i].set_text(self.player_digits[i],5,8)
-                    self.game.coils.knocker_rampUp.pulse(15)
+                    self.game.coils.Solenoidselect.pulse(30)
+                    self.game.coils.outhole_knocker.pulse(15)
 
             #set clear time
             self.delay(name='clear', event_type=None, delay=5.0, handler=self.clear)

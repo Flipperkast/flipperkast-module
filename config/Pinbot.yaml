@@ -250,13 +250,13 @@ PRLamps:
         number: L23
     5x:
         number: L24
-    eject25k:
+    eject1:
         number: L25
-    eject50k:
+    eject2:
         number: L26
-    eject75k:
+    eject3:
         number: L27
-    ejectEB:
+    eject0:
         number: L28
     drops:
         number: L31

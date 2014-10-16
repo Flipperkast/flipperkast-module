@@ -13,6 +13,7 @@ from procgame import *
 from ramprules import *
 from bumpers import *
 from visor import *
+from droptargets import *
 
 # all paths
 game_path = "C:\P-ROC\pyprocgame-master\games\VXtra_start/"
@@ -32,7 +33,8 @@ class Generalplay(game.Mode):
             
             self.ramp_rules = Ramp_rules(self.game, 38)
             self.bumper_rules = Bumpers(self.game, 20)
-            self.visor_rules = Visor(self.game, 38)
+            self.visor_rules = Visor(self.game, 39)
+            self.droptargets = Droptargets(self.game, 40)
             self.start_time = 0
             
             self.register_all_sounds()
@@ -54,13 +56,22 @@ class Generalplay(game.Mode):
              pass
            
         def mode_started(self):
-             # Bij het begin start ie dus de code uit het object ramprules 
+             # Bij het begin start ie dus de code uit het object ramprules
+             startanim = dmd.Animation().load(dmd_path+'intro_starwars.dmd')
              self.game.modes.add(self.ramp_rules)
              self.game.modes.add(self.bumper_rules)
              self.game.modes.add(self.visor_rules)
+             self.game.modes.add(self.droptargets)
+             if self.game.ball==1:
+                     self.animation_layer = dmd.AnimatedLayer(frames=startanim.frames, opaque=False, repeat=False, hold=False, frame_time=4)
+                     self.layer = dmd.GroupedLayer(128, 32, [self.animation_layer])
+                     self.delay(name='clear_layer', event_type=None, delay=20, handler=self.clear_layer)
              self.game.sound.play_music('music_starwars_intro', loops=-1)
              self.game.sound.play('speech_Prepare_to_fire')
-        
+             
+        def clear_layer(self):
+             self.layer = None
+             
         def register_all_sounds(self):
              # Register all sounds!
              for (dirpath, dirnames, filenames) in walk(speech_path):
@@ -139,13 +150,18 @@ class Generalplay(game.Mode):
 
         def sw_outhole_active_for_500ms(self, sw):
              self.game.coils.outhole_knocker.pulse(40)
-
+             if self.game.switches.Reject.is_active():
+                     self.game.coils.Rejecthole_SunFlash.pulse(50)
+                     self.game.coils.Visormotor.enable()
+             if self.game.switches.Leject.is_active():
+                     self.game.coils.Lejecthole_LeftPlFlash.pulse(50)
+                     self.game.coils.Visormotor.enable()
         def sw_slingL_active(self,sw):
              self.game.sound.play("sound_slings")
              self.game.score(100)
 
         def sw_slingR_active(self,sw):
-             self.game.sound.play("sound_slings")
+             self.game.sound.play("sound_stormtrooper_laser")
              self.game.score(100)
 
         def sw_Routlane_active(self,sw):
@@ -159,3 +175,15 @@ class Generalplay(game.Mode):
              self.game.score(25000)
              if time() - 30 < self.start_time:
                      print "GRATIS BAL!"
+
+        def sw_vortex20k_active(self,sw):
+             self.game.sound.play("speech_luke_learntheways")
+             self.game.score(20000)
+        def sw_vortex100k_active(self,sw):
+             self.game.sound.play("speech_darthvader_yourfather")
+             self.game.score(100000)
+        def sw_vortex5k_active(self,sw):
+            if self.game.switches.vortex100k.time_since_change()>2 and self.game.switches.vortex20k.time_since_change()>2:
+                    self.game.sound.play("speech_chewbacca_01")
+                    self.game.score(5000)
+
