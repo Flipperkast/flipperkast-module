@@ -72,41 +72,40 @@ class Attract(game.Mode):
         pass
 
     def mode_started(self):
+        # run feature lamp patterns
+        self.change_lampshow()
 
-                # run feature lamp patterns
-                self.change_lampshow()
+        #check for stuck balls
+        self.delay(name='stuck_balls', event_type=None, delay=1, handler=self.game.effects.release_stuck_balls)
 
-                #check for stuck balls
-                self.delay(name='stuck_balls', event_type=None, delay=1, handler=self.game.effects.release_stuck_balls)
+        print("Trough is full:" +str(self.game.trough.is_full()))
 
-                print("Trough is full:" +str(self.game.trough.is_full()))
+        #create dmd attract screens
+        self.williams_logo = dmd.AnimatedLayer(frames=dmd.Animation().load(game_path+'dmd/williams_animated.dmd').frames,frame_time=1,hold=True)
 
-                #create dmd attract screens
-                self.williams_logo = dmd.AnimatedLayer(frames=dmd.Animation().load(game_path+'dmd/williams_animated.dmd').frames,frame_time=1,hold=True)
+        self.proc_logo = dmd.FrameLayer(opaque=True, frame=dmd.Animation().load(game_path+'dmd/splash.dmd').frames[0])
+        self.proc_logo.transition = dmd.ExpandTransition(direction='vertical')
 
-                self.proc_logo = dmd.FrameLayer(opaque=True, frame=dmd.Animation().load(game_path+'dmd/splash.dmd').frames[0])
-                self.proc_logo.transition = dmd.ExpandTransition(direction='vertical')
+        self.press_start = dmd.TextLayer(128/2, 18, font_09Bx7, "center", opaque=True).set_text("PRESS START", seconds=None, blink_frames=1)
+        self.free_play = dmd.TextLayer(128/2, 6, font_09Bx7, "center", opaque=False).set_text("FREE PLAY")
+        self.coins_layer = dmd.GroupedLayer(128, 32, [self.free_play, self.press_start])
+        self.coins_layer.transition = dmd.PushTransition(direction='north')
 
-                self.press_start = dmd.TextLayer(128/2, 18, font_09Bx7, "center", opaque=True).set_text("PRESS START", seconds=None, blink_frames=1)
-                self.free_play = dmd.TextLayer(128/2, 6, font_09Bx7, "center", opaque=False).set_text("FREE PLAY")
-                self.coins_layer = dmd.GroupedLayer(128, 32, [self.free_play, self.press_start])
-                self.coins_layer.transition = dmd.PushTransition(direction='north')
+        self.p1_layer = dmd.TextLayer(0, 0, self.game.fonts['num_09Bx7'], "left", opaque=False)
+        self.p2_layer = dmd.TextLayer(128, 0, self.game.fonts['num_09Bx7'], "right", opaque=False)
+        self.p3_layer = dmd.TextLayer(0, 24, self.game.fonts['num_09Bx7'], "left", opaque=False)
+        self.p4_layer = dmd.TextLayer(128, 24, self.game.fonts['num_09Bx7'], "right", opaque=False)
+        self.last_scores_layer = dmd.GroupedLayer(128, 32, [self.p1_layer,self.p2_layer,self.p3_layer,self.p4_layer])
+        self.last_scores_layer.transition = dmd.CrossFadeTransition(width=128,height=32)
 
-                self.p1_layer = dmd.TextLayer(0, 0, self.game.fonts['num_09Bx7'], "left", opaque=False)
-                self.p2_layer = dmd.TextLayer(128, 0, self.game.fonts['num_09Bx7'], "right", opaque=False)
-                self.p3_layer = dmd.TextLayer(0, 24, self.game.fonts['num_09Bx7'], "left", opaque=False)
-                self.p4_layer = dmd.TextLayer(128, 24, self.game.fonts['num_09Bx7'], "right", opaque=False)
-                self.last_scores_layer = dmd.GroupedLayer(128, 32, [self.p1_layer,self.p2_layer,self.p3_layer,self.p4_layer])
-                self.last_scores_layer.transition = dmd.CrossFadeTransition(width=128,height=32)
+        self.game_over_layer = dmd.TextLayer(128/2, 10, font_09Bx7, "center", opaque=True).set_text("GAME OVER")
+        self.game_over_layer.transition = dmd.CrossFadeTransition(width=128,height=32)
 
-                self.game_over_layer = dmd.TextLayer(128/2, 10, font_09Bx7, "center", opaque=True).set_text("GAME OVER")
-                self.game_over_layer.transition = dmd.CrossFadeTransition(width=128,height=32)
+        self.scores_layer = dmd.TextLayer(128/2, 11, font_09Bx7, "center", opaque=True).set_text("HIGH SCORES")
+        self.scores_layer.transition = dmd.PushTransition(direction='west')
 
-                self.scores_layer = dmd.TextLayer(128/2, 11, font_09Bx7, "center", opaque=True).set_text("HIGH SCORES")
-                self.scores_layer.transition = dmd.PushTransition(direction='west')
-
-                gen = dmd.MarkupFrameGenerator()
-                credits_frame = gen.frame_for_markup("""
+        gen = dmd.MarkupFrameGenerator()
+        credits_frame = gen.frame_for_markup("""
 
 #CREDITS#
 
@@ -133,61 +132,60 @@ class Attract(game.Mode):
 [not yet......?]
 """)
 
-                self.credits_layer = dmd.PanningLayer(width=128, height=32, frame=credits_frame, origin=(0,0), translate=(0,1), bounce=False)
+        self.credits_layer = dmd.PanningLayer(width=128, height=32, frame=credits_frame, origin=(0,0), translate=(0,1), bounce=False)
 
-                #run attract dmd screens
-                self.attract_display()
+        #run attract dmd screens
+        self.attract_display()
 
 
     def sw_outhole_active(self, sw):
-            self.game.coils.outhole_knocker.pulse(30)
-            return True
-
+        self.game.coils.outhole_knocker.pulse(30)
+        return True
 
     def change_lampshow(self):
-            shuffle(self.game.lampshow_keys)
-            self.game.lampctrl.play_show(self.game.lampshow_keys[0], repeat=True)
-            self.delay(name='lampshow', event_type=None, delay=10, handler=self.change_lampshow)
+        shuffle(self.game.lampshow_keys)
+        self.game.lampctrl.play_show(self.game.lampshow_keys[0], repeat=True)
+        self.delay(name='lampshow', event_type=None, delay=10, handler=self.change_lampshow)
 
 
     def attract_display(self):
-            script = list()
+        script = list()
 
-            script.append({'seconds':2.0, 'layer':self.proc_logo})
-            script.append({'seconds':7.0, 'layer':self.williams_logo})
-            script.append({'seconds':3.0, 'layer':self.coins_layer})
-            script.append({'seconds':20.0, 'layer':self.credits_layer})
-            script.append({'seconds':3.0, 'layer':self.scores_layer})
+        script.append({'seconds':2.0, 'layer':self.proc_logo})
+        script.append({'seconds':7.0, 'layer':self.williams_logo})
+        script.append({'seconds':3.0, 'layer':self.coins_layer})
+        script.append({'seconds':20.0, 'layer':self.credits_layer})
+        script.append({'seconds':3.0, 'layer':self.scores_layer})
 
-            for frame in highscore.generate_highscore_frames(self.game.highscore_categories):
-                new_layer = dmd.FrameLayer(frame=frame)
-                new_layer.transition = dmd.PushTransition(direction='west')
-                script.append({'seconds':2.0, 'layer':new_layer})
+        for frame in highscore.generate_highscore_frames(self.game.highscore_categories):
+            new_layer = dmd.FrameLayer(frame=frame)
+            new_layer.transition = dmd.PushTransition(direction='west')
+            script.append({'seconds':2.0, 'layer':new_layer})
 
-            #add in the game over screen
-            go_index=3
+        #add in the game over screen
+        go_index=3
+        go_time=3
+        if self.game.system_status=='game_over':
+            go_index=0
             go_time=3
-            if self.game.system_status=='game_over':
-                go_index=0
-                go_time=3
 
-                #add in the player scores after a game is played
-                self.player_layers=[self.p1_layer,self.p2_layer,self.p3_layer,self.p4_layer]
-                for i in range(len(self.game.players)):
-                     score = self.game.players[i].score
-                     #digit = str(score)
-                     self.player_layers[i].set_text(locale.format("%d", score, True))
+            #add in the player scores after a game is played
+            self.player_layers=[self.p1_layer,self.p2_layer,self.p3_layer,self.p4_layer]
+            for i in range(len(self.game.players)):
+                score = self.game.players[i].score
+                #digit = str(score)
+                self.player_layers[i].set_text(locale.format("%d", score, True))
 
-                ls_index=0
-                ls_time=10
-                self.game.system_status='attract'
-                print("system status = "+self.game.system_status.upper())
+            ls_index=0
+            ls_time=10
+            self.game.system_status='attract'
+            print("system status = "+self.game.system_status.upper())
 
-                script.insert(ls_index,{'seconds':ls_time, 'layer':self.last_scores_layer})
+            script.insert(ls_index,{'seconds':ls_time, 'layer':self.last_scores_layer})
 
-            script.insert(go_index,{'seconds':go_time, 'layer':self.game_over_layer})
+        script.insert(go_index,{'seconds':go_time, 'layer':self.game_over_layer})
 
-            self.layer = dmd.ScriptedLayer(width=128, height=32, script=script)
+        self.layer = dmd.ScriptedLayer(width=128, height=32, script=script)
 
 
     def mode_stopped(self):
@@ -240,22 +238,22 @@ class Attract(game.Mode):
 class BaseGameMode(game.Mode):
     """docstring for BaseGameMode"""
     def __init__(self, game):
-                super(BaseGameMode, self).__init__(game, 2)
-                self.tilt_layer = dmd.TextLayer(128/2, 7, font_18x12, "center", opaque=True).set_text("TILT")
-                self.layer = None # Presently used for tilt layer
-                self.ball_starting = True
+        super(BaseGameMode, self).__init__(game, 2)
+        self.tilt_layer = dmd.TextLayer(128/2, 7, font_18x12, "center", opaque=True).set_text("TILT")
+        self.layer = None # Presently used for tilt layer
+        self.ball_starting = True
 
-                #register speech call files
-                self.game.sound.register_sound('tilt_warning', speech_path+"tilt_warning.ogg")
-                self.game.sound.register_sound('tilt_', sound_path+"tilt.ogg")
-                #register sound effects files
-                self.game.sound.register_sound('ball_saved', speech_path+"ball_saved.aiff")
-                #self.game.sound.register_sound('shooterlane', sound_path+"motor_driveaway.aiff")
-                #self.game.sound.register_music('shooterlane_loop', music_path+"shooterlane_loop.ogg")
+        #register speech call files
+        self.game.sound.register_sound('tilt_warning', speech_path+"tilt_warning.ogg")
+        self.game.sound.register_sound('tilt_', sound_path+"tilt.ogg")
+        #register sound effects files
+        self.game.sound.register_sound('ball_saved', speech_path+"ball_saved.aiff")
+        #self.game.sound.register_sound('shooterlane', sound_path+"motor_driveaway.aiff")
+        #self.game.sound.register_music('shooterlane_loop', music_path+"shooterlane_loop.ogg")
 
-                self.ball_saved = False
-                self.ball_save_time = self.game.user_settings['Gameplay (Feature)']['Ballsave Timer']
-                self.instant_info_on = False
+        self.ball_saved = False
+        self.ball_save_time = self.game.user_settings['Gameplay (Feature)']['Ballsave Timer']
+        self.instant_info_on = False
 
     def mode_started(self):
         #debug
@@ -307,55 +305,55 @@ class BaseGameMode(game.Mode):
 
     def add_basic_modes(self,ball_in_play):
 
-            #lower priority basic modes
-            self.generalplay = Generalplay(self.game, 20)
+        #lower priority basic modes
+        self.generalplay = Generalplay(self.game, 20)
 
-            #medium priority basic modes
+        #medium priority basic modes
 
-            #higher priority basic modes
+        #higher priority basic modes
 ##            self.info = Info(self.game, 70)
 ##            self.info.callback = self.info_callback
 
-            #start modes
-            self.game.modes.add(self.generalplay)
+        #start modes
+        self.game.modes.add(self.generalplay)
 
 
     def ball_save_callback(self):
-            anim = dmd.Animation().load(game_path+"dmd/ball_saved.dmd")
-            self.layer = dmd.AnimatedLayer(frames=anim.frames,hold=False)
-            self.game.sound.play_voice('ball_saved')
-            self.delay(name='clear_display', event_type=None, delay=2, handler=self.clear)
-            self.ball_saved = True
+        anim = dmd.Animation().load(game_path+"dmd/ball_saved.dmd")
+        self.layer = dmd.AnimatedLayer(frames=anim.frames,hold=False)
+        self.game.sound.play_voice('ball_saved')
+        self.delay(name='clear_display', event_type=None, delay=2, handler=self.clear)
+        self.ball_saved = True
 
     def clear(self):
             self.layer=None
 
     def ball_launch_callback(self):
-            #print("Debug - Ball Starting var is:"+str(self.ball_starting))
-            if self.ball_starting:
-                self.game.ball_save.start_lamp()
-                #start background music
-                #self.game.effects.rk_play_music()
-                pass
+        #print("Debug - Ball Starting var is:"+str(self.ball_starting))
+        if self.ball_starting:
+            self.game.ball_save.start_lamp()
+            #start background music
+            #self.game.effects.rk_play_music()
+            pass
 
     def mode_tick(self):
-            if self.game.switches.startButton.is_active(1) and self.game.switches.flipperLwL.is_active(1) and self.game.switches.flipperLwR.is_active():
-                print("reset button code entered")
-                self.game.sound.stop_music()
-                self.game.end_run_loop()
+        if self.game.switches.startButton.is_active(1) and self.game.switches.flipperLwL.is_active(1) and self.game.switches.flipperLwR.is_active():
+            print("reset button code entered")
+            self.game.sound.stop_music()
+            self.game.end_run_loop()
 
-                while len(self.game.dmd.frame_handlers) > 0:
-                    del self.game.dmd.frame_handlers[0]
+            while len(self.game.dmd.frame_handlers) > 0:
+                del self.game.dmd.frame_handlers[0]
 
-                del self.game.proc
+            del self.game.proc
 
     def mode_stopped(self):
-            print("Basic Game Mode Ended, Ball "+str(self.game.ball))
+        print("Basic Game Mode Ended, Ball "+str(self.game.ball))
 
-            # Ensure flippers are disabled
-            self.game.coils.flipperEnable.disable()
+        # Ensure flippers are disabled
+        self.game.coils.flipperEnable.disable()
 
-            self.game.modes.remove(self.generalplay)
+        self.game.modes.remove(self.generalplay)
 
 
     def ball_drained_callback(self):
@@ -718,19 +716,19 @@ class Game(game.BasicGame):
         self.save_game_data()
 
     def calc_time_average_string(self, prev_total, prev_x, new_value):
-          prev_time_list = prev_x.split(':')
-          prev_time = (int(prev_time_list[0]) * 60) + int(prev_time_list[1])
-          avg_game_time = int((int(prev_total) * int(prev_time)) + int(new_value)) / (int(prev_total) + 1)
-          avg_game_time_min = avg_game_time/60
-          avg_game_time_sec = str(avg_game_time%60)
-          if len(avg_game_time_sec) == 1:
-                  avg_game_time_sec = '0' + avg_game_time_sec
-          return_str = str(avg_game_time_min) + ':' + avg_game_time_sec
-          return return_str
+        prev_time_list = prev_x.split(':')
+        prev_time = (int(prev_time_list[0]) * 60) + int(prev_time_list[1])
+        avg_game_time = int((int(prev_total) * int(prev_time)) + int(new_value)) / (int(prev_total) + 1)
+        avg_game_time_min = avg_game_time/60
+        avg_game_time_sec = str(avg_game_time%60)
+        if len(avg_game_time_sec) == 1:
+              avg_game_time_sec = '0' + avg_game_time_sec
+        return_str = str(avg_game_time_min) + ':' + avg_game_time_sec
+        return return_str
 
     def calc_number_average(self, prev_total, prev_x, new_value):
-          avg_game_time = int((prev_total * prev_x) + new_value) / (prev_total + 1)
-          return int(avg_game_time)
+        avg_game_time = int((prev_total * prev_x) + new_value) / (prev_total + 1)
+        return int(avg_game_time)
 
     def set_status(self, text):
         self.dmd.set_message(text, 3)
@@ -744,13 +742,13 @@ class Game(game.BasicGame):
 class rkPlayer(game.Player):
 
     def __init__(self, name):
-                super(rkPlayer, self).__init__(name)
+        super(rkPlayer, self).__init__(name)
 
-                self.player_stats = {}
-                self.player_stats['status']=''
-                self.visor_position='up'
-                self.visor_lamps = [0,0,0,0,0]
-                self.visor_balls = 0
+        self.player_stats = {}
+        self.player_stats['status']=''
+        self.visor_position='up'
+        self.visor_lamps = [0,0,0,0,0]
+        self.visor_balls = 0
 
 
 def main():

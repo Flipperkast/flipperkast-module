@@ -26,19 +26,19 @@ supported_sound = ['.wav', '.aiff', '.ogg', '.mp3']
 
 class Generalplay(game.Mode):
 
-        def __init__(self, game, priority):
-            super(Generalplay, self).__init__(game, priority)
+    def __init__(self, game, priority):
+        super(Generalplay, self).__init__(game, priority)
 
-            # register modes: hij maakt van de code die onder 'Ramp_rules' staat een object. Het nummer gaat over prioriteit die bv belangrijk is voor animaties:
-            
-            self.ramp_rules = Ramp_rules(self.game, 38)
-            self.bumper_rules = Bumpers(self.game, 20)
-            self.visor_rules = Visor(self.game, 39)
-            self.droptargets = Droptargets(self.game, 40)
-            self.start_time = 0
-            
-            self.register_all_sounds()
-            #register animation layers
+        # register modes: hij maakt van de code die onder 'Ramp_rules' staat een object. Het nummer gaat over prioriteit die bv belangrijk is voor animaties:
+
+        self.ramp_rules = Ramp_rules(self.game, 38)
+        self.bumper_rules = Bumpers(self.game, 20)
+        self.visor_rules = Visor(self.game, 39)
+        self.droptargets = Droptargets(self.game, 40)
+        self.start_time = 0
+
+        self.register_all_sounds()
+        #register animation layers
 ##            self.showroom_text = dmd.TextLayer(70, 22, self.game.fonts['07x5'], "center", opaque=False)
 ##            self.showroom_bgnd = dmd.FrameLayer(opaque=False, frame=dmd.Animation().load(dmd_path+'showroom.dmd').frames[0])
 ##            self.showroom_layer = dmd.GroupedLayer(128, 32, [self.showroom_bgnd, self.showroom_text])
@@ -46,75 +46,72 @@ class Generalplay(game.Mode):
 ##
 ##            self.ramp_text = dmd.TextLayer(70, 23, self.game.fonts['07x5'], "center", opaque=False)
 
-            #register lampshow
-            self.game.lampctrl.register_show('rampenter_show', lampshow_path+"rampenter.lampshow")
+        #register lampshow
+        self.game.lampctrl.register_show('rampenter_show', lampshow_path+"rampenter.lampshow")
 
-            self.lamps_ramp = ['megaScore','Rtimelock','Rlock','Rextraball']
-            self.willekeurigevariabele=0
+        self.lamps_ramp = ['megaScore','Rtimelock','Rlock','Rextraball']
+        self.willekeurigevariabele=0
 
-        def reset(self):
-             pass
-           
-        def mode_started(self):
-             # Bij het begin start ie dus de code uit het object ramprules
-             startanim = dmd.Animation().load(dmd_path+'intro_starwars.dmd')
-             self.game.modes.add(self.ramp_rules)
-             self.game.modes.add(self.bumper_rules)
-             self.game.modes.add(self.visor_rules)
-             self.game.modes.add(self.droptargets)
-             if self.game.ball==1:
-                     self.animation_layer = dmd.AnimatedLayer(frames=startanim.frames, opaque=False, repeat=False, hold=False, frame_time=4)
-                     self.layer = dmd.GroupedLayer(128, 32, [self.animation_layer])
-                     self.delay(name='clear_layer', event_type=None, delay=20, handler=self.clear_layer)
-             self.game.sound.play_music('music_starwars_intro', loops=-1)
-             self.game.sound.play('speech_Prepare_to_fire')
-             
-        def clear_layer(self):
-             self.layer = None
-             
-        def register_all_sounds(self):
-             # Register all sounds!
-             for (dirpath, dirnames, filenames) in walk(speech_path):
-                for filename in filenames:
-                    if splitext(filename)[1] in supported_sound:
-                        sound = "speech_" + splitext(filename)[0].replace(" ", "_")
-                        print "SOUND REGISTERED:", sound
-                        self.game.sound.register_sound(sound, join(dirpath, filename))
-                        
-             for (dirpath, dirnames, filenames) in walk(sound_path):
-                for filename in filenames:
-                    if splitext(filename)[1] in supported_sound:
-                        sound = "sound_" + splitext(filename)[0].replace(" ", "_")
-                        print "SOUND REGISTERED:", sound
-                        self.game.sound.register_sound(sound, join(dirpath, filename))
-                        
-             for (dirpath, dirnames, filenames) in walk(music_path):
-                for filename in filenames:
-                    if splitext(filename)[1] in supported_sound:
-                        sound = "music_" + splitext(filename)[0].replace(" ", "_")
-                        print "SOUND REGISTERED:", sound
-                        self.game.sound.register_music(sound, join(dirpath, filename))
+    def reset(self):
+        pass
 
-        def mode_stopped(self):
-             self.game.modes.remove(self.ramp_rules)
-             self.game.modes.remove(self.bumper_rules)
-             self.game.modes.remove(self.visor_rules)
+    def mode_started(self):
+        # Bij het begin start ie dus de code uit het object ramprules
+        startanim = dmd.Animation().load(dmd_path+'intro_starwars.dmd')
+        self.game.modes.add(self.ramp_rules)
+        self.game.modes.add(self.bumper_rules)
+        self.game.modes.add(self.visor_rules)
+        self.game.modes.add(self.droptargets)
+        if self.game.ball==1:
+            self.animation_layer = dmd.AnimatedLayer(frames=startanim.frames, opaque=False, repeat=False, hold=False, frame_time=4)
+            self.layer = dmd.GroupedLayer(128, 32, [self.animation_layer])
+            self.delay(name='clear_layer', event_type=None, delay=20, handler=self.clear_layer)
+        self.game.sound.play_music('music_starwars_intro', loops=-1)
+        self.game.sound.play('speech_Prepare_to_fire')
 
-        def mode_tick(self):
-             pass
+    def clear_layer(self):
+        self.layer = None
+
+    def register_all_sounds(self):
+        # Register all sounds!
+        for (dirpath, dirnames, filenames) in walk(speech_path):
+            for filename in filenames:
+                if splitext(filename)[1] in supported_sound:
+                    sound = "speech_" + splitext(filename)[0].replace(" ", "_")
+                    print "SOUND REGISTERED:", sound
+                    self.game.sound.register_sound(sound, join(dirpath, filename))
+
+        for (dirpath, dirnames, filenames) in walk(sound_path):
+            for filename in filenames:
+                if splitext(filename)[1] in supported_sound:
+                    sound = "sound_" + splitext(filename)[0].replace(" ", "_")
+                    print "SOUND REGISTERED:", sound
+                    self.game.sound.register_sound(sound, join(dirpath, filename))
+
+        for (dirpath, dirnames, filenames) in walk(music_path):
+            for filename in filenames:
+                if splitext(filename)[1] in supported_sound:
+                    sound = "music_" + splitext(filename)[0].replace(" ", "_")
+                    print "SOUND REGISTERED:", sound
+                    self.game.sound.register_music(sound, join(dirpath, filename))
+
+    def mode_stopped(self):
+        self.game.modes.remove(self.ramp_rules)
+        self.game.modes.remove(self.bumper_rules)
+        self.game.modes.remove(self.visor_rules)
+
+    def mode_tick(self):
+        pass
 
 ## lamps and animations
 
-        def update_lamps(self):
-             #Steven (ook kan: if self.game.ramp_move.ramp_up:
-             # wel gaan hier problemen komen met modes: als die ook de lampjes willen aansturen....daarnaast gaat de lampupdate niet vaak genoeg
-             if self.willekeurigevariabele==1:
-                self.game.effects.drive_lamp('advance_planet','medium')
-             else:
-                self.game.effects.drive_lamp('advance_planet','off')
-
-
-
+    def update_lamps(self):
+        #Steven (ook kan: if self.game.ramp_move.ramp_up:
+        # wel gaan hier problemen komen met modes: als die ook de lampjes willen aansturen....daarnaast gaat de lampupdate niet vaak genoeg
+        if self.willekeurigevariabele==1:
+            self.game.effects.drive_lamp('advance_planet','medium')
+        else:
+            self.game.effects.drive_lamp('advance_planet','off')
 
 ##        def play_spinner(self):
 ##             # use spinner_turns to select frame, divide with // operator to increase needed turns
@@ -130,7 +127,7 @@ class Generalplay(game.Mode):
 ##                self.animation_layer.add_frame_listener(-1, self.clear_layer)
 ##                self.layer = dmd.GroupedLayer(128, 32, [self.animation_layer])
 ##                self.animation_status = 'running'
-               
+
 ##        def clear_layer(self):
 ##             self.layer = None
 
@@ -140,50 +137,52 @@ class Generalplay(game.Mode):
 
 
 ## Switches regular gameplay
-        def sw_shooterLane_open_for_100ms(self,sw):
-             self.game.coils.RvisorGI.schedule(schedule=0x0f0f0f0f, cycle_seconds=1, now=True) 
-             self.start_time = time()
-             self.game.sound.play_music('music_starwars_theme', loops=-1)
-             
-        def sw_eject_active_for_1400ms(self, sw):
-             self.game.coils.Ejecthole_LeftInsBFlash.pulse(40)
+    def sw_shooterLane_open_for_100ms(self,sw):
+        self.game.coils.RvisorGI.schedule(schedule=0x0f0f0f0f, cycle_seconds=1, now=True)
+        self.start_time = time()
+        self.game.sound.play_music('music_starwars_theme', loops=-1)
 
-        def sw_outhole_active_for_500ms(self, sw):
-             self.game.coils.outhole_knocker.pulse(40)
-             if self.game.switches.Reject.is_active():
-                     self.game.coils.Rejecthole_SunFlash.pulse(50)
-                     self.game.coils.Visormotor.enable()
-             if self.game.switches.Leject.is_active():
-                     self.game.coils.Lejecthole_LeftPlFlash.pulse(50)
-                     self.game.coils.Visormotor.enable()
-        def sw_slingL_active(self,sw):
-             self.game.sound.play("sound_slings")
-             self.game.score(100)
+    def sw_eject_active_for_1400ms(self, sw):
+        self.game.coils.Ejecthole_LeftInsBFlash.pulse(40)
 
-        def sw_slingR_active(self,sw):
-             self.game.sound.play("sound_stormtrooper_laser")
-             self.game.score(100)
+    def sw_outhole_active_for_500ms(self, sw):
+        self.game.coils.outhole_knocker.pulse(40)
+        if self.game.switches.Reject.is_active():
+            self.game.coils.Rejecthole_SunFlash.pulse(50)
+            self.game.coils.Visormotor.enable()
+        if self.game.switches.Leject.is_active():
+            self.game.coils.Lejecthole_LeftPlFlash.pulse(50)
+            self.game.coils.Visormotor.enable()
 
-        def sw_Routlane_active(self,sw):
-             self.game.sound.play("sound_evil_laugh")
-             self.game.score(25000)
-             if time() - 30 < self.start_time:
-                     print "GRATIS BAL!"
-             
-        def sw_Loutlane_active(self,sw):
-             self.game.sound.play("sound_evil_laugh")
-             self.game.score(25000)
-             if time() - 30 < self.start_time:
-                     print "GRATIS BAL!"
+    def sw_slingL_active(self,sw):
+        self.game.sound.play("sound_slings")
+        self.game.score(100)
 
-        def sw_vortex20k_active(self,sw):
-             self.game.sound.play("speech_luke_learntheways")
-             self.game.score(20000)
-        def sw_vortex100k_active(self,sw):
-             self.game.sound.play("speech_darthvader_yourfather")
-             self.game.score(100000)
-        def sw_vortex5k_active(self,sw):
-            if self.game.switches.vortex100k.time_since_change()>2 and self.game.switches.vortex20k.time_since_change()>2:
-                    self.game.sound.play("speech_chewbacca_01")
-                    self.game.score(5000)
+    def sw_slingR_active(self,sw):
+        self.game.sound.play("sound_stormtrooper_laser")
+        self.game.score(100)
 
+    def sw_Routlane_active(self,sw):
+        self.game.sound.play("sound_evil_laugh")
+        self.game.score(25000)
+        if time() - 30 < self.start_time:
+            print "GRATIS BAL!"
+
+    def sw_Loutlane_active(self,sw):
+        self.game.sound.play("sound_evil_laugh")
+        self.game.score(25000)
+        if time() - 30 < self.start_time:
+            print "GRATIS BAL!"
+
+    def sw_vortex20k_active(self,sw):
+        self.game.sound.play("speech_luke_learntheways")
+        self.game.score(20000)
+
+    def sw_vortex100k_active(self,sw):
+        self.game.sound.play("speech_darthvader_yourfather")
+        self.game.score(100000)
+
+    def sw_vortex5k_active(self,sw):
+        if self.game.switches.vortex100k.time_since_change()>2 and self.game.switches.vortex20k.time_since_change()>2:
+            self.game.sound.play("speech_chewbacca_01")
+            self.game.score(5000)

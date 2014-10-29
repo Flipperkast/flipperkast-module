@@ -1,8 +1,8 @@
 #
 # Bonus
 #
-# Calculates end-of-ball bonus 
-# 
+# Calculates end-of-ball bonus
+#
 __author__="Pieter"
 __date__ ="$10 Sep 2012 20:36:37 PM$"
 
@@ -35,10 +35,10 @@ class Bonus(game.Mode):
 
         # check for flippersbuttons pressed at start for faster bonuscount
         if self.game.switches.flipperLwR.is_active() and self.game.switches.flipperLwL.is_active():
-                self.delay_time = 0.250
-                self.game.coils.flipperEnable.disable()
+            self.delay_time = 0.250
+            self.game.coils.flipperEnable.disable()
         else:
-                self.delay_time = 2.5
+            self.delay_time = 2.5
 
     def mode_started(self):
         # Disable the flippers
@@ -52,10 +52,10 @@ class Bonus(game.Mode):
 
     def mode_tick(self):
         ## Hit both flippers for faster bonuscount
-         if self.game.switches.flipperLwR.is_active() and self.game.switches.flipperLwL.is_active():
-             self.delay_time = 0.250
-             # disable flippers
-             self.game.coils.flipperEnable.disable()
+        if self.game.switches.flipperLwR.is_active() and self.game.switches.flipperLwL.is_active():
+            self.delay_time = 0.250
+            # disable flippers
+            self.game.coils.flipperEnable.disable()
 
 ## mode functions
 
@@ -122,5 +122,3 @@ class Bonus(game.Mode):
                 self.callback()
 
             self.bonus_counter += 1
-
-
