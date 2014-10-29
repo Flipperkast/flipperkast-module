@@ -17,7 +17,7 @@ class Droptargets(game.Mode):
                 
         def mode_started(self):
                 self.reset_droptargets()
-		self.ejectlampjes = 0
+				self.ejectlampjes = 0
 
         def mode_stopped(self):
                 pass
